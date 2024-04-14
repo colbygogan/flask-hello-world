@@ -3,10 +3,10 @@ import panel as pn
 import numpy as np
 from bokeh.plotting import figure
 
-# Initialize Panel with Bokeh for interactive plots
+# Initialize Panel with necessary extensions
 pn.extension()
 
-# Create data for plotting
+# Create some data
 data = pd.DataFrame({
     'x': range(50),
     'y': np.random.randn(50).cumsum()
@@ -25,7 +25,11 @@ table = pn.widgets.DataFrame(data, name='Data Table')
 # Arrange plot and table vertically
 app_layout = pn.Column("# My Panel App", plot_panel, table)
 
-# Convert the Panel layout into a servable app, setting it to not start a server immediately
-app = pn.io.server.get_server(app_layout).app
+# We use .servable() when running locally. For deployment, we use get_server
+def get_wsgi_app():
+    """Function to return the WSGI application."""
+    server = pn.io.server.get_server({'/': app_layout})
+    return server.app
 
+app = get_wsgi_app()
 
