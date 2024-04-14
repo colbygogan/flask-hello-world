@@ -23,4 +23,13 @@ table = pn.widgets.DataFrame(data, name='Data Table')
 
 # Create a Panel layout and display it
 app = pn.Column("# My Panel App", plot_panel, table)
-app.servable()
+
+# Make the app servable and expose as a WSGI application
+servable_app = app.servable()
+
+def app(environ, start_response):
+    """Simple WSGI application to serve the Panel app."""
+    if not hasattr(servable_app, 'server'):
+        servable_app.server = pn.io.server.get_server(servable_app)
+    return servable_app.server.app(environ, start_response)
+
