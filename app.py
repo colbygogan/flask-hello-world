@@ -19,7 +19,7 @@ plot.line(data['x'], data['y'], legend_label='Trend')
 plot_panel = pn.pane.Bokeh(plot)
 
 # Create a data table
-table = pn.widgets.DataFrame(data, name='Data Table')
+table = pn.widgets.DataFrame(data, name='Data Tablee')
 
 # Create a Panel layout and display it
 app = pn.Column("# My Panel App", plot_panel, table)
